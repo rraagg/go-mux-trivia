@@ -1,21 +1,18 @@
-package triviaBundle
+package models
 
 type TriviaBundle struct {
-	ID          int      `json:"id"`
-	Question    string   `json:"question"`
-	Category    string   `json:"category"`
-	Answers     []Answer `json:"answers"`
-	ShowAnswer  bool     `json:"showAnswer"`
-	NextBundles []int    `json:"nextBundles"`
-	PrevBundles []int    `json:"prevBundles"`
-	GameOver    bool     `json:"gameOver"`
+	ID         int      `json:"id,omitempty"`
+	Question   string   `json:"question"`
+	Category   string   `json:"category"`
+	Answers    []Answer `json:"answers"`
+	ShowAnswer bool     `json:"show_answer,omitempty"`
 }
 
 type Answer struct {
-	ID             int    `json:"id"`
-	TriviaBundleID int    `json:"triviaBundleID"`
-	AnswerText     string `json:"answerText"`
-	IsCorrect      bool   `json:"isCorrect"`
+	ID             int    `json:"id,omitempty"`
+	TriviaBundleID int    `json:"trivia_bundle_id,omitempty"`
+	AnswerText     string `json:"answer_text"`
+	IsCorrect      bool   `json:"is_correct"`
 }
 
 func (t *TriviaBundle) GetID() int {
@@ -36,18 +33,6 @@ func (t *TriviaBundle) GetAnswers() []Answer {
 
 func (t *TriviaBundle) GetShowAnswer() bool {
 	return t.ShowAnswer
-}
-
-func (t *TriviaBundle) GetNextBundles() []int {
-	return t.NextBundles
-}
-
-func (t *TriviaBundle) GetPrevBundles() []int {
-	return t.PrevBundles
-}
-
-func (t *TriviaBundle) GetGameOver() bool {
-	return t.GameOver
 }
 
 func (a *Answer) GetID() int {
@@ -102,28 +87,13 @@ func (t *TriviaBundle) SetShowAnswer(showAnswer bool) {
 	t.ShowAnswer = showAnswer
 }
 
-func (t *TriviaBundle) SetNextBundles(nextBundles []int) {
-	t.NextBundles = nextBundles
-}
-
-func (t *TriviaBundle) SetPrevBundles(prevBundles []int) {
-	t.PrevBundles = prevBundles
-}
-
-func (t *TriviaBundle) SetGameOver(gameOver bool) {
-	t.GameOver = gameOver
-}
-
 func NewTriviaBundle(id int, question string, category string, answers []Answer, showAnswer bool, nextBundles []int, prevBundles []int, gameOver bool) *TriviaBundle {
 	return &TriviaBundle{
-		ID:          id,
-		Question:    question,
-		Category:    category,
-		Answers:     answers,
-		ShowAnswer:  showAnswer,
-		NextBundles: nextBundles,
-		PrevBundles: prevBundles,
-		GameOver:    gameOver,
+		ID:         id,
+		Question:   question,
+		Category:   category,
+		Answers:    answers,
+		ShowAnswer: showAnswer,
 	}
 }
 
@@ -134,20 +104,4 @@ func NewAnswer(id int, triviaBundleID int, answerText string, isCorrect bool) *A
 		AnswerText:     answerText,
 		IsCorrect:      isCorrect,
 	}
-}
-
-type TriviaBundleRepository interface {
-	GetTriviaBundle(id int) (*TriviaBundle, error)
-	GetTriviaBundles() ([]*TriviaBundle, error)
-	CreateTriviaBundle(triviaBundle *TriviaBundle) (int, error)
-	UpdateTriviaBundle(triviaBundle *TriviaBundle) error
-	DeleteTriviaBundle(id int) error
-}
-
-type TriviaBundleService interface {
-	GetTriviaBundle(id int) (*TriviaBundle, error)
-	GetTriviaBundles() ([]*TriviaBundle, error)
-	CreateTriviaBundle(triviaBundle *TriviaBundle) (int, error)
-	UpdateTriviaBundle(triviaBundle *TriviaBundle) error
-	DeleteTriviaBundle(id int) error
 }

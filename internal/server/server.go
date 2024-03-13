@@ -10,12 +10,14 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"go-mux-trivia/internal/database"
+	"go-mux-trivia/internal/service"
 )
 
 type Server struct {
 	port int
 
-	db database.Service
+	db                  database.Service
+	triviaBundleService service.TriviaBundleService
 }
 
 func NewServer() *http.Server {
@@ -23,7 +25,8 @@ func NewServer() *http.Server {
 	NewServer := &Server{
 		port: port,
 
-		db: database.New(),
+		db:                  database.New(),
+		triviaBundleService: service.NewTriviaBundleService(database.New()),
 	}
 
 	// Declare Server config
