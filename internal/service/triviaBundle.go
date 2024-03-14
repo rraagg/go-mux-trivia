@@ -3,6 +3,7 @@ package service
 import (
 	"go-mux-trivia/internal/database"
 	"go-mux-trivia/internal/models"
+	"go-mux-trivia/internal/repository"
 )
 
 type TriviaBundleService interface {
@@ -15,36 +16,36 @@ type TriviaBundleService interface {
 }
 
 type triviaBundleService struct {
-	db database.Service
+	r repository.TriviaRepository
 }
 
-func NewTriviaBundleService(db database.Service) TriviaBundleService {
+func NewTriviaBundleService() *triviaBundleService {
 	return &triviaBundleService{
-		db: db,
+		r: repository.NewTriviaRepository(database.New()),
 	}
 }
 
 func (s *triviaBundleService) GetTriviaBundle(id int) (*models.TriviaBundle, error) {
-	bundle, err := s.db.GetTriviaBundle(id)
+	bundle, err := s.r.GetTriviaBundle(id)
 	return bundle, err
 }
 
 func (s *triviaBundleService) CreateTriviaBundle(tb *models.TriviaBundle) (int, error) {
-	return s.db.CreateTriviaBundle(tb)
+	return s.r.CreateTriviaBundle(tb)
 }
 
 func (s *triviaBundleService) UpdateTriviaBundle(tb *models.TriviaBundle) error {
-	return s.db.UpdateTriviaBundle(tb)
+	return s.r.UpdateTriviaBundle(tb)
 }
 
 func (s *triviaBundleService) DeleteTriviaBundle(id int) error {
-	return s.db.DeleteTriviaBundle(id)
+	return s.r.DeleteTriviaBundle(id)
 }
 
 func (s *triviaBundleService) GetTriviaBundles() ([]*models.TriviaBundle, error) {
-	return s.db.GetTriviaBundles()
+	return s.r.GetTriviaBundles()
 }
 
 func (s *triviaBundleService) GetTriviaBundlesByCategory(category string) ([]*models.TriviaBundle, error) {
-	return s.db.GetTriviaBundlesByCategory(category)
+	return s.r.GetTriviaBundlesByCategory(category)
 }
