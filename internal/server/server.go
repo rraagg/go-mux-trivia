@@ -17,24 +17,23 @@ import (
 )
 
 type Server struct {
-	port                   int
-	db                     *sql.DB
-	templates              *template.Template
-	triviaBundleService    service.TriviaBundleService
-	triviaBundleRepostiory repository.TriviaRepository
+	port             int
+	db               *sql.DB
+	templates        *template.Template
+	triviaService    service.TriviaService
+	triviaRepostiory repository.TriviaRepository
 }
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
-		port:                   port,
-		db:                     database.New(),
-		templates:              template.Must(template.ParseGlob("./internal/templates/*")),
-		triviaBundleService:    service.NewTriviaBundleService(),
-		triviaBundleRepostiory: repository.NewTriviaRepository(database.New()),
+		port:             port,
+		db:               database.New(),
+		templates:        template.Must(template.ParseGlob("./internal/templates/*")),
+		triviaService:    service.NewTriviaService(),
+		triviaRepostiory: repository.NewTriviaRepository(database.New()),
 	}
 
-	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
 		Handler:      NewServer.RegisterRoutes(),

@@ -37,7 +37,7 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
-	jsonResp, err := json.Marshal(s.triviaBundleRepostiory.Health())
+	jsonResp, err := json.Marshal(s.triviaRepostiory.Health())
 
 	if err != nil {
 		log.Fatalf("error handling JSON marshal. Err: %v", err)
@@ -56,7 +56,7 @@ func (s *Server) GetTriviaBundle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	triviaBundle, err := s.triviaBundleService.GetTriviaBundle(id)
+	triviaBundle, err := s.triviaService.GetTriviaBundle(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -85,7 +85,7 @@ func (s *Server) CreateTriviaBundle(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Default().Printf("Handler: Creating TriviaBundle: %s", tb.Question)
 
-	id, err := s.triviaBundleService.CreateTriviaBundle(&tb)
+	id, err := s.triviaService.CreateTriviaBundle(&tb)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
