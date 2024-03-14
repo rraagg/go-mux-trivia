@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,14 +11,15 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"go-mux-trivia/internal/database"
+	"go-mux-trivia/internal/repository"
 	"go-mux-trivia/internal/service"
 )
 
 type Server struct {
-	port int
-
-	db                  database.Service
-	triviaBundleService service.TriviaBundleService
+	port                   int
+	db                     *sql.DB
+	triviaBundleService    service.TriviaBundleService
+	triviaBundleRepostiory repository.TriviaRepository
 }
 
 func NewServer() *http.Server {
@@ -25,8 +27,9 @@ func NewServer() *http.Server {
 	NewServer := &Server{
 		port: port,
 
-		db:                  database.New(),
-		triviaBundleService: service.NewTriviaBundleService(database.New()),
+		db:                     database.New(),
+		triviaBundleService:    service.NewTriviaBundleService(),
+		triviaBundleRepostiory: repository.NewTriviaRepository(database.New()),
 	}
 
 	// Declare Server config
