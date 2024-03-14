@@ -3,6 +3,7 @@ package server
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"net/http"
 	"os"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 type Server struct {
 	port                   int
 	db                     *sql.DB
+	templates              *template.Template
 	triviaBundleService    service.TriviaBundleService
 	triviaBundleRepostiory repository.TriviaRepository
 }
@@ -25,9 +27,9 @@ type Server struct {
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	NewServer := &Server{
-		port: port,
-
+		port:                   port,
 		db:                     database.New(),
+		templates:              template.Must(template.ParseGlob("./internal/templates/*")),
 		triviaBundleService:    service.NewTriviaBundleService(),
 		triviaBundleRepostiory: repository.NewTriviaRepository(database.New()),
 	}

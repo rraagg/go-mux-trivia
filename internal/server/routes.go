@@ -50,26 +50,30 @@ func (s *Server) GetTriviaBundle(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 
-	// Convert the id from string to int
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// Call the service layer to get the TriviaBundle
 	triviaBundle, err := s.triviaBundleService.GetTriviaBundle(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	jsonResp, err := json.Marshal(triviaBundle)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+	data := map[string]interface{}{
+		"Title":    triviaBundle.Category,
+		"Question": triviaBundle.Question,
+		"Category": triviaBundle.Category,
+		"Answers":  triviaBundle.Answers,
 	}
 
-	_, _ = w.Write(jsonResp)
+	err = s.templates.ExecuteTemplate(w, "base.html", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (s *Server) CreateTriviaBundle(w http.ResponseWriter, r *http.Request) {
