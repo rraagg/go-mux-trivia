@@ -6,7 +6,7 @@ import (
 	"go-mux-trivia/internal/repository"
 )
 
-type TriviaBundleService interface {
+type TriviaService interface {
 	GetTriviaBundle(id int) (*models.TriviaBundle, error)
 	GetTriviaBundlesByCategory(category string) ([]*models.TriviaBundle, error)
 	GetTriviaBundles() ([]*models.TriviaBundle, error)
@@ -15,37 +15,37 @@ type TriviaBundleService interface {
 	DeleteTriviaBundle(id int) error
 }
 
-type triviaBundleService struct {
+type triviaService struct {
 	r repository.TriviaRepository
 }
 
-func NewTriviaBundleService() *triviaBundleService {
-	return &triviaBundleService{
+func NewTriviaService() *triviaService {
+	return &triviaService{
 		r: repository.NewTriviaRepository(database.New()),
 	}
 }
 
-func (s *triviaBundleService) GetTriviaBundle(id int) (*models.TriviaBundle, error) {
+func (s *triviaService) GetTriviaBundle(id int) (*models.TriviaBundle, error) {
 	bundle, err := s.r.GetTriviaBundle(id)
 	return bundle, err
 }
 
-func (s *triviaBundleService) CreateTriviaBundle(tb *models.TriviaBundle) (int, error) {
+func (s *triviaService) CreateTriviaBundle(tb *models.TriviaBundle) (int, error) {
 	return s.r.CreateTriviaBundle(tb)
 }
 
-func (s *triviaBundleService) UpdateTriviaBundle(tb *models.TriviaBundle) error {
+func (s *triviaService) UpdateTriviaBundle(tb *models.TriviaBundle) error {
 	return s.r.UpdateTriviaBundle(tb)
 }
 
-func (s *triviaBundleService) DeleteTriviaBundle(id int) error {
+func (s *triviaService) DeleteTriviaBundle(id int) error {
 	return s.r.DeleteTriviaBundle(id)
 }
 
-func (s *triviaBundleService) GetTriviaBundles() ([]*models.TriviaBundle, error) {
+func (s *triviaService) GetTriviaBundles() ([]*models.TriviaBundle, error) {
 	return s.r.GetTriviaBundles()
 }
 
-func (s *triviaBundleService) GetTriviaBundlesByCategory(category string) ([]*models.TriviaBundle, error) {
+func (s *triviaService) GetTriviaBundlesByCategory(category string) ([]*models.TriviaBundle, error) {
 	return s.r.GetTriviaBundlesByCategory(category)
 }
